@@ -1,0 +1,100 @@
+# config/sources.yaml — стартовый seed реестра источников (ТЗ §4, §11, §16).
+#
+# ВНИМАНИЕ: с этапа Discovery-агента (§16) реестр живёт в таблице sources БД,
+# этот файл читается только один раз при первом запуске (scripts/seed_sources.py),
+# чтобы не начинать с пустой базы. Дальнейшее управление источниками — через
+# команду /sources и Scout-агента, а не редактирование этого файла.
+#
+# Поля соответствуют колонкам sources(...) из core/models.py:
+#   platform   — telegram | reddit | youtube | vk | forum | generic | discord
+#   handle     — @канал / r/sub / channel_id / URL (в зависимости от platform)
+#   lang       — ru | en | es | fr (см. §15 регион. матрицу)
+#   region     — свободный код региона/страны для отчётности (см. geo.yaml)
+#   enabled    — опрашивать ли источник планировщиком
+#   priority   — приоритет из §4 (для сортировки в очереди Monitor-агента)
+#   render_js  — только для generic: включает Playwright для JS-сайтов (§17)
+#   selectors  — только для generic: CSS-селекторы поста/автора/текста/даты/ссылки (§17)
+
+telegram:
+  - handle: "@example_crypto_chat_ru"
+    lang: ru
+    region: RU
+    enabled: false
+    priority: 5
+    comment: "Пример: обсуждение сигнального канала, discovery через TGStat/Telemetr"
+  - handle: "@example_crypto_chat_es"
+    lang: es
+    region: AR
+    enabled: false
+    priority: 5
+
+reddit:
+  - handle: "CryptoCurrency"
+    lang: en
+    region: GLOBAL
+    enabled: false
+    priority: 5
+  - handle: "CryptoMarkets"
+    lang: en
+    region: GLOBAL
+    enabled: false
+    priority: 5
+  - handle: "Daytrading"
+    lang: en
+    region: GLOBAL
+    enabled: false
+    priority: 4
+  - handle: "Bybit"
+    lang: en
+    region: GLOBAL
+    enabled: false
+    priority: 4
+    comment: "Сообщество конкурента — категория competitor, +10 к score (§19)"
+  - handle: "binance"
+    lang: en
+    region: GLOBAL
+    enabled: false
+    priority: 4
+    comment: "Сообщество конкурента — категория competitor, +10 к score (§19)"
+  - handle: "BitcoinBrasil"
+    lang: pt
+    region: BR
+    enabled: false
+    priority: 3
+    comment: "Этап 4 (PT), пока candidate"
+  - handle: "merval"
+    lang: es
+    region: AR
+    enabled: false
+    priority: 4
+
+youtube:
+  - handle: "UCExampleCryptoChannelId"
+    lang: en
+    region: GLOBAL
+    enabled: false
+    priority: 4
+    comment: "Список каналов из конфига — комментарии под свежими видео (§4)"
+
+vk:
+  - handle: "example_crypto_group"
+    lang: ru
+    region: RU
+    enabled: false
+    priority: 3
+    comment: "v1.1 — включается после MVP"
+
+generic:
+  - handle: "https://example-forum.tld/trading/"
+    lang: en
+    region: NG
+    enabled: false
+    priority: 3
+    render_js: false
+    selectors:
+      post_container: "div.post"
+      author: "span.post-author"
+      text: "div.post-body"
+      date: "time.post-date"
+      link: "a.post-permalink"
+    comment: "Универсальный парсер (§17): пример конфига для Nairaland-подобного форума"

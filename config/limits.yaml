@@ -1,0 +1,36 @@
+# config/limits.yaml — анти-бан лимиты отправки (ТЗ §10, §11).
+#
+# ВАЖНО: эти лимиты — потолок, зашитый как значения по умолчанию. Правило §2.5/§10:
+# лимиты можно только УЖЕСТОЧАТЬ (уменьшать), увеличивать значения выше указанных
+# здесь через конфиг нельзя — реальная проверка диапазона делается в коде
+# core/rate_limiter.py, а не только в этом файле.
+
+telegram_sender:
+  # Холодные первые касания в день на аккаунт-отправитель.
+  max_cold_messages_per_day: 15
+  # «Прогрев» — первые 2 недели работы нового аккаунта-отправителя.
+  warmup_days: 14
+  warmup_max_cold_messages_per_day: 5
+  # Пауза между отправками, секунды (случайное значение в диапазоне).
+  delay_between_sends_sec_min: 180
+  delay_between_sends_sec_max: 600
+  # Ночная тишина по часовому поясу лида (ничего не отправляем).
+  quiet_hours_start: "23:00"
+  quiet_hours_end: "08:00"
+  # Follow-up: не более 1 на лида, не раньше N дней после первого касания.
+  max_follow_ups_per_lead: 1
+  follow_up_min_days_after_first_contact: 5
+
+telegram_monitor:
+  # Вступление в новые чаты мониторинговым аккаунтом — вручную, с лимитом в день.
+  max_new_chat_joins_per_day: 2
+
+reactivation:
+  # Модуль удержания (v2, §12): лид registered, не дошедший до active за N дней.
+  inactive_after_registered_days: 14
+  max_reactivation_contacts_per_lead: 1
+
+# Автопауза всей отправки при FloodWait/PeerFlood от Telegram — неотключаема,
+# управляется кодом (core/rate_limiter.py), здесь только флаг алерта оператору.
+auto_pause_on_flood_wait: true
+alert_operator_on_auto_pause: true

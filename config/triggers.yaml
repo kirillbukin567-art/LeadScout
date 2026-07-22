@@ -1,0 +1,125 @@
+# config/triggers.yaml — словари триггер-фильтра, уровень 1 без LLM (ТЗ §7, §18).
+#
+# Это ПРИМЕР СТРУКТУРЫ с небольшим числом фраз на язык/категорию.
+# Боевая версия должна содержать минимум 25/25/10/10 фраз на язык (pain/activity/
+# partner_signals/anti_triggers — см. §18), генерируется разработчиком через LLM
+# и валидируется заказчиком (RU/EN — обязательно). Далее словарь развивается
+# командами управляющего бота (/dict add|del|list) без участия разработчика,
+# все изменения версионируются в таблице dict_history (§18).
+#
+# Категории:
+#   pain_exchange     — боль по текущей бирже (комиссии, вывод, блокировки)
+#   activity          — признаки активной торговли (плечо, фьючерсы, PnL, ликвидации)
+#   partner_signals   — признаки потенциального субпартнёра (аудитория, монетизация)
+#   anti_triggers     — сразу в filtered_out (airdrop-хантинг, спам, казино-реклама)
+#
+# Матчинг — по вхождению подстроки/regex без учёта регистра (реализация в
+# core/trigger_filter.py). Фразы можно писать как regex, если нужно (\bслово\b и т.п.).
+
+ru:
+  pain_exchange:
+    - "комиссия огромная"
+    - "завис вывод"
+    - "биржа заблокировала"
+    - "ищу биржу"
+    - "какую биржу выбрать"
+    - "не могу вывести деньги"
+  activity:
+    - "взял лонг"
+    - "взял шорт"
+    - "плечо x"
+    - "фьючерс"
+    - "ликвидация"
+    - "скальпинг"
+    - "binance"
+    - "bybit"
+    - "okx"
+    - "mexc"
+  partner_signals:
+    - "монетизировать канал"
+    - "ищу партнёрку"
+    - "админ канала"
+    - "реклама в канале"
+  anti_triggers:
+    - "раздача"
+    - "airdrop"
+    - "казино"
+    - "заходи в бота"
+
+en:
+  pain_exchange:
+    - "fees are killing me"
+    - "withdrawal stuck"
+    - "exchange blocked my account"
+    - "looking for exchange"
+    - "which exchange for futures"
+    - "can't withdraw"
+  activity:
+    - "went long"
+    - "went short"
+    - "leverage x"
+    - "futures"
+    - "liquidated"
+    - "scalping"
+    - "binance"
+    - "bybit"
+    - "okx"
+    - "mexc"
+  partner_signals:
+    - "monetize my channel"
+    - "looking for affiliate program"
+    - "admin of"
+    - "sponsor my channel"
+  anti_triggers:
+    - "airdrop"
+    - "giveaway"
+    - "casino bonus"
+    - "join my bot"
+
+es:
+  pain_exchange:
+    - "comisiones altísimas"
+    - "retiro congelado"
+    - "la exchange bloqueó mi cuenta"
+    - "busco exchange"
+    - "qué exchange para futuros"
+  activity:
+    - "entré en largo"
+    - "entré en corto"
+    - "apalancamiento x"
+    - "futuros"
+    - "liquidación"
+    - "binance"
+    - "bybit"
+  partner_signals:
+    - "monetizar mi canal"
+    - "busco programa de afiliados"
+    - "admin de"
+  anti_triggers:
+    - "airdrop"
+    - "sorteo"
+    - "bono de casino"
+
+fr:
+  pain_exchange:
+    - "frais trop élevés"
+    - "retrait bloqué"
+    - "la plateforme a bloqué mon compte"
+    - "je cherche une exchange"
+    - "quelle exchange pour les futures"
+  activity:
+    - "j'ai pris du long"
+    - "j'ai pris du short"
+    - "effet de levier x"
+    - "futures"
+    - "liquidation"
+    - "binance"
+    - "bybit"
+  partner_signals:
+    - "monétiser mon canal"
+    - "je cherche un programme d'affiliation"
+    - "admin de"
+  anti_triggers:
+    - "airdrop"
+    - "tirage au sort"
+    - "bonus casino"
