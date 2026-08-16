@@ -44,15 +44,21 @@ def seed_from_yaml(path: Path | str = DEFAULT_SOURCES_PATH) -> int:
                 if already_exists:
                     continue
 
+                enabled = bool(entry.get("enabled", False))
+                # Seed-источники уже вручную отобраны разработчиком/заказчиком (не Scout-ом),
+                # поэтому включённые (enabled: true) сразу становятся active и мониторятся;
+                # выключенные остаются candidate до ручного включения через /sources (§16).
+                status = SourceStatus.ACTIVE if enabled else SourceStatus.CANDIDATE
+
                 session.add(
                     Source(
                         platform=platform,
                         handle=handle,
                         lang=entry.get("lang", "en"),
                         region=entry.get("region"),
-                        enabled=bool(entry.get("enabled", False)),
+                        enabled=enabled,
                         discovered_by=DiscoveredBy.SEED,
-                        status=SourceStatus.CANDIDATE,
+                        status=status,
                     )
                 )
                 created += 1

@@ -16,17 +16,24 @@
 #   selectors  — только для generic: CSS-селекторы поста/автора/текста/даты/ссылки (§17)
 
 telegram:
-  - handle: "@example_crypto_chat_ru"
+  - handle: "@delay_vz_zdes"
     lang: ru
     region: RU
-    enabled: false
+    enabled: true
     priority: 5
-    comment: "Пример: обсуждение сигнального канала, discovery через TGStat/Telemetr"
-  - handle: "@example_crypto_chat_es"
-    lang: es
-    region: AR
-    enabled: false
+    comment: "Чат обсуждения сигнального канала(delay_vz_zdes)"
+  - handle: "@uris_change"
+    lang: ru
+    region: RU
+    enabled: true
     priority: 5
+    comment: "URIS Change"
+  - handle: "@web_investors"
+    lang: ru
+    region: RU
+    enabled: true
+    priority: 5
+    comment: "Web Investors"
 
 reddit:
   - handle: "CryptoCurrency"

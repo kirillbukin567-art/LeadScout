@@ -50,10 +50,16 @@ def _sa_enum(enum_cls: type[enum.Enum]) -> SAEnum:
 
 
 class MessageStatus(str, enum.Enum):
-    """Статус входящего сообщения в конвейере Ingest → Trigger Filter → LLM Scorer (§5, §6)."""
+    """Статус входящего сообщения в конвейере Ingest → Trigger Filter → LLM Scorer (§5, §6).
+
+    scored_pending — сообщение прошло триггер-фильтр (§7), является кандидатом
+    (есть «хорошие» триггеры, нет анти-триггеров) и ждёт очереди LLM Scorer.
+    После вызова LLM Scorer статус переходит в scored (см. agents/scorer.py).
+    """
 
     NEW = "new"
     FILTERED_OUT = "filtered_out"
+    SCORED_PENDING = "scored_pending"
     SCORED = "scored"
     LEAD = "lead"
 

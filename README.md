@@ -27,7 +27,7 @@ controlbot/     — управляющий Telegram-бот (aiogram): коман
 config/         — sources.yaml, triggers.yaml, geo.yaml, limits.yaml
 knowledge/      — bingx_facts.md — база знаний для диалогов (заполняет заказчик)
 data/           — SQLite БД (data/leadscout.db), в git не попадает
-scripts/        — init_db.py, seed_sources.py
+scripts/        — init_db.py, seed_sources.py, login_monitor.py, run_monitor.py
 tests/          — pytest: триггер-фильтр, rate limiter, парсинг JSON от LLM
 ```
 
@@ -73,6 +73,23 @@ python -m scripts.seed_sources
 python -m controlbot.bot
 ```
 
+Авторизовать мониторинговую Telegram-сессию (один раз, интерактивно — номер
+телефона/код/пароль 2FA, см. `TG_SESSION_MONITOR` в `.env`):
+
+```bash
+python -m scripts.login_monitor
+```
+
+Запустить Telegram-монитор (`connectors/telegram_monitor.py`, только чтение,
+§4/§10 ТЗ): подписывается на новые сообщения активных Telegram-источников
+(`sources.status=active`, при первом запуске засеивается из `config/sources.yaml`),
+прогоняет их через триггер-фильтр (§7) и сохраняет кандидатов со статусом
+`scored_pending` для последующего LLM Scorer:
+
+```bash
+python -m scripts.run_monitor
+```
+
 ## Тесты
 
 ```bash
@@ -97,8 +114,9 @@ pytest
 
 ## Следующие шаги реализации (по этапам ТЗ §13)
 
-1. **MVP:** сетевой слой `connectors/telegram_connector.py` + `reddit_connector.py`,
-   `llm/client.py` (реальный вызов Anthropic), `agents/monitor.py` + `agents/scorer.py`,
+1. **MVP:** сетевой слой `connectors/telegram_monitor.py` (реализован — потоковый
+   Telethon-монитор, только чтение) + `reddit_connector.py`,
+   `llm/client.py` (реальный вызов Anthropic), `agents/scorer.py`,
    режим M1 (карточки без отправки).
 2. **Этап 2:** Sender через Telethon, Approve-кнопки в `controlbot/handlers.py`,
    `agents/drafter.py` + `agents/replier.py`, применение `core/rate_limiter.py`.
